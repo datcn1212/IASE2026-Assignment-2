@@ -11,6 +11,7 @@ import org.junit.jupiter.api.TestMethodOrder
 @TestMethodOrder(MethodOrderer.Random::class)
 class FileBettingServiceTest {
 
+    // ERROR
     @Test
     fun `test file betting with threads`() {
         val file = createTempFile("bets", ".txt").toFile()
@@ -52,6 +53,7 @@ class FileBettingServiceTest {
         assertEquals(3, bets.size)
     }
 
+    // ERROR
     @Test
     fun `fresh service has no bets`() {
         val service = FileBettingService(SHARED_BET_FILE)
