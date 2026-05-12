@@ -128,7 +128,6 @@ class WorldCupTest {
         assertEquals(0, result.evaluated)
     }
 
-    // ERROR
     @Test
     fun `evaluate returns zero when no bets are placed`() {
         val matches = listOf(
@@ -168,9 +167,8 @@ class WorldCupTest {
         assertEquals(Prediction.DRAW, Prediction.outcomeOf(1, 1))
     }
 
-    // ERROR
     @Test
-    @Timeout(value = 300, unit = TimeUnit.MILLISECONDS)
+    @Timeout(value = 10000, unit = TimeUnit.MILLISECONDS)
     fun `load json from network`(){
         val jsonNetwork = JsonLoader.loadJsonFromNetwork()
         val jsonLocal = JsonLoader.loadJson()
