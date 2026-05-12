@@ -6,10 +6,19 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.TestMethodOrder
+import kotlin.test.BeforeTest
 
 /** Tests for [FileBettingService]. */
 @TestMethodOrder(MethodOrderer.Random::class)
 class FileBettingServiceTest {
+
+    @BeforeTest
+    fun init() {
+        if (SHARED_BET_FILE.exists()) {
+            SHARED_BET_FILE.writeText("")
+        }
+    }
+
 
     // ERROR
     @Test
@@ -53,7 +62,6 @@ class FileBettingServiceTest {
         assertEquals(3, bets.size)
     }
 
-    // ERROR
     @Test
     fun `fresh service has no bets`() {
         val service = FileBettingService(SHARED_BET_FILE)
