@@ -1,8 +1,10 @@
 # Flaky Test Report
 
+Name: Cao, Nhu Dat - Ta, Thi Phuong Lien
+
 ## Flaky Test 1
 
-**Test name:** `FileBettingServiceTest#test file betting with threads`
+**Test name:** `de.seuhd.worldcup.FileBettingServiceTest#test file betting with threads`
 
 **Root cause:**
 `FileBettingService.placeBet` does a non-atomic read-modify-write: `readBets()`,
@@ -18,7 +20,7 @@ always produce 100 stored bets regardless of scheduling.
 
 ## Flaky Test 2
 
-**Test name:** `FileBettingServiceTest#fresh service has no bets`
+**Test name:** `de.seuhd.worldcup.FileBettingServiceTest#fresh service has no bets`
 
 **Root cause:**
 `@TestMethodOrder(MethodOrderer.Random::class)` randomises method order. 
@@ -35,7 +37,7 @@ no longer matters. `@TestMethodOrder` is left untouched.
 
 ## Flaky Test 3
 
-**Test name:** `WorldCupTest#evaluate returns zero when no bets are placed`
+**Test name:** `de.seuhd.worldcup.WorldCupTest#evaluate returns zero when no bets are placed`
 
 **Root cause:**
 `BettingService` is an `object` (singleton). `evaluate()` memoises its result in
@@ -43,14 +45,14 @@ a private `cachedResult` field and returns it on subsequent calls. `clear()`
 empties `bets` but never resets `cachedResult`. If any earlier test called
 `evaluate()` with bets present, the cached non-zero result survives the
 `@BeforeTest` clear, so this test sees `evaluated > 0` and fails. Outcome
-depends on JUnit's method execution order.
+depends on execution order.
 
 **Fix:**
 Reset `cachedResult = null` inside `clear()`. The cache is now in correct state, so `evaluate()` after `clear()` always recomputes from an empty map.
 
 ## Flaky Test 4
 
-**Test name:** `WorldCupTest#standings are stable when multiple teams tie on all criteria`
+**Test name:** `de.seuhd.worldcup.WorldCupTest#standings are stable when multiple teams tie on all criteria`
 
 **Root cause:**
 `StandingsService.calculate` sorts by points, goal difference, goals for. When
@@ -68,7 +70,7 @@ swapping one non-deterministic structure for another.
 
 ## Flaky Test 5
 
-**Test name:** `WorldCupTest#load json from network`
+**Test name:** `de.seuhd.worldcup.WorldCupTest#load json from network`
 
 **Root cause:**
 This test uses the real `JsonLoader.loadJsonFromNetwork()` and depends on live HTTP responses. 
