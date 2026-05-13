@@ -45,8 +45,8 @@ data class BettingResult(
  */
 object BettingService {
 
-    val bets = mutableMapOf<Int, Bet>()
-    var cachedResult: BettingResult? = null
+    private val bets = mutableMapOf<Int, Bet>()
+    private var cachedResult: BettingResult? = null
 
     /** Store a new bet, replacing any existing bet for the same match. */
     fun placeBet(bet: Bet) {

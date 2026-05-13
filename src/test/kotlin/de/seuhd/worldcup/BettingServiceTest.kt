@@ -1,7 +1,10 @@
 package de.seuhd.worldcup
 
+import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.assertThrows
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class BettingServiceTest {
 
@@ -50,20 +53,20 @@ class BettingServiceTest {
     fun `removeBet removes an existing bet so it no longer affects evaluation`() {
         val m = match(1, "AAA", "BBB", 2, 1)
         BettingService.placeBet(Bet(matchId = 1, prediction = Prediction.HOME_WIN))
-        assert(BettingService.evaluate(listOf(m)).correct == 1)
+        assertEquals(1, BettingService.evaluate(listOf(m)).correct)
         BettingService.removeBet(1)
-        assert(BettingService.evaluate(listOf(m)).correct == 0)
+        assertEquals(0, BettingService.evaluate(listOf(m)).correct)
     }
 
     @Test
     fun `removeBet does nothing when no bet exists for that matchId`() {
         val m = match(1, "AAA", "BBB", 2, 1)
         BettingService.placeBet(Bet(matchId = 1, prediction = Prediction.HOME_WIN))
-        assert(BettingService.evaluate(listOf(m)).correct == 1)
+        assertEquals(1, BettingService.evaluate(listOf(m)).correct)
 
         // non-existent matchId
         BettingService.removeBet(999)
-        assert(BettingService.evaluate(listOf(m)).correct == 1)
+        assertEquals(1, BettingService.evaluate(listOf(m)).correct)
     }
 
     // ── changeBet ─────────────────────────────────────────────────────────────
@@ -72,19 +75,16 @@ class BettingServiceTest {
     fun `changeBet updates the prediction for an existing bet`() {
         val m = match(1, "AAA", "BBB", 2, 1)
         BettingService.placeBet(Bet(matchId = 1, prediction = Prediction.AWAY_WIN))
-        assert(BettingService.evaluate(listOf(m)).correct == 0)
+        assertEquals(0, BettingService.evaluate(listOf(m)).correct)
 
         BettingService.changeBet(Bet(matchId = 1, prediction = Prediction.HOME_WIN))
-        assert(BettingService.evaluate(listOf(m)).correct == 1)
+        assertEquals(1, BettingService.evaluate(listOf(m)).correct)
     }
 
     @Test
     fun `changeBet throws when no bet exists for that matchId`() {
-        try {
+        assertThrows(IllegalArgumentException::class.java) {
             BettingService.changeBet(Bet(matchId = 1, prediction = Prediction.HOME_WIN))
-            assert(false) { "Expected IllegalArgumentException" }
-        } catch (e: IllegalArgumentException) {
-            assert(e.message == "No existing bet found for matchId 1")
         }
     }
 }

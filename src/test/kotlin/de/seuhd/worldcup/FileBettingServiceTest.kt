@@ -20,7 +20,6 @@ class FileBettingServiceTest {
     }
 
 
-    // ERROR
     @Test
     fun `test file betting with threads`() {
         val file = createTempFile("bets", ".txt").toFile()
