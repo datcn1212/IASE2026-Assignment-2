@@ -83,4 +83,5 @@ test fails. The outcome depends on `Random` and on real network conditions.
 `loadJsonFromNetwork` already accepts an injectable `UrlFetcher`. Pass a lambda that returns the bundled classpath
 resource, and drop the `@Timeout`. The test now exercises the parsing logic
 without any real I/O, eliminating both sources of non-determinism (shuffle +
-network) at the source.
+network) at the source. We intentionally decouple unit correctness from network availability: 
+logic is tested deterministically in unit tests, while connectivity and live endpoint behavior are tested separately as integration concerns.
