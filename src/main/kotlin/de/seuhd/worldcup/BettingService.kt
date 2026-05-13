@@ -59,6 +59,7 @@ object BettingService {
      * as "evaluated" when both a prediction and a final score are available.
      */
     fun evaluate(matches: List<Match>): BettingResult {
+        cachedResult?.let { return it }
         var correct = 0
         var evaluated = 0
         for (match in matches) {

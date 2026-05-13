@@ -2,7 +2,6 @@ package de.seuhd.worldcup
 
 import java.io.File
 import kotlin.io.path.createTempFile
-import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import org.junit.jupiter.api.MethodOrderer

@@ -23,7 +23,7 @@ object StandingsService {
     fun calculate(group: Group): List<TableEntry> {
         data class Acc(var points: Int = 0, var goalsFor: Int = 0, var goalsAgainst: Int = 0)
 
-        val accs = LinkedHashMap<Team, Acc>()
+        val accs = IdentityHashMap<Team, Acc>()
         for (team in group.teams) accs[team] = Acc()
         val teamById: Map<String, Team> = group.teams.associateBy { it.id }
 
