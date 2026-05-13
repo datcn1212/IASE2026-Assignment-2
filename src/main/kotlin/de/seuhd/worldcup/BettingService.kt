@@ -101,5 +101,6 @@ object BettingService {
     /** Drop all stored bets. */
     fun clear() {
         bets.clear()
+        cachedResult = null
     }
 }
