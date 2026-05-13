@@ -2,6 +2,7 @@ package de.seuhd.worldcup
 
 import java.io.File
 import kotlin.io.path.createTempFile
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import org.junit.jupiter.api.MethodOrderer
@@ -10,6 +11,11 @@ import org.junit.jupiter.api.TestMethodOrder
 /** Tests for [FileBettingService]. */
 @TestMethodOrder(MethodOrderer.Random::class)
 class FileBettingServiceTest {
+
+    @BeforeTest
+    fun resetSharedFile() {
+        SHARED_BET_FILE.delete()
+    }
 
     @Test
     fun `test file betting with threads`() {
