@@ -7,6 +7,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import org.junit.jupiter.api.MethodOrderer
 import org.junit.jupiter.api.TestMethodOrder
+import kotlin.test.BeforeTest
 
 /** Tests for [FileBettingService]. */
 @TestMethodOrder(MethodOrderer.Random::class)

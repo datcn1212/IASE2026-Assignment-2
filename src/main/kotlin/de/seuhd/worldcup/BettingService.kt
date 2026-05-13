@@ -59,7 +59,6 @@ object BettingService {
      * as "evaluated" when both a prediction and a final score are available.
      */
     fun evaluate(matches: List<Match>): BettingResult {
-        cachedResult?.let { return it }
         var correct = 0
         var evaluated = 0
         for (match in matches) {
@@ -99,8 +98,9 @@ object BettingService {
      * Remove the bet for [matchId]. Does nothing if no bet exists for that match.
      */
     fun removeBet(matchId: Int) {
-        bets.remove(matchId)
-        cachedResult = null
+        if (bets.remove(matchId) != null) {
+            cachedResult = null
+        }
     }
 
     /**
@@ -108,9 +108,12 @@ object BettingService {
      * exists; throws [IllegalArgumentException] if no bet is found for that match.
      */
     fun changeBet(bet: Bet) {
-        require(bets.containsKey(bet.matchId)) { "No bet exists for matchId ${bet.matchId}" }
-        bets[bet.matchId] = bet
-        cachedResult = null
+        if (bets.containsKey(bet.matchId)) {
+            bets[bet.matchId] = bet
+            cachedResult = null
+        } else {
+            throw IllegalArgumentException("No existing bet found for matchId ${bet.matchId}")
+        }
     }
 
     /** Drop all stored bets. */

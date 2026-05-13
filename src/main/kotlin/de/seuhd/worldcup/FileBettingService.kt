@@ -19,6 +19,7 @@ class FileBettingService(private val file: File) {
 
     fun getBets(): List<Bet> = synchronized(lock) { readBets().values.toList() }
 
+    @Synchronized
     private fun readBets(): MutableMap<Int, Bet> {
         if (!file.exists()) return mutableMapOf()
         return file.useLines { lines ->
@@ -28,6 +29,7 @@ class FileBettingService(private val file: File) {
         }
     }
 
+    @Synchronized
     private fun writeBets(bets: Collection<Bet>) {
         file.writeText(bets.joinToString(separator = "\n", postfix = "\n") { formatBet(it) })
     }
