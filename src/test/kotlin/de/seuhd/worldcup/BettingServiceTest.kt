@@ -2,6 +2,7 @@ package de.seuhd.worldcup
 
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class BettingServiceTest {
 
@@ -26,22 +27,42 @@ class BettingServiceTest {
 
     @Test
     fun `evaluateBonus awards 3 points for an exact score prediction`() {
-        TODO("implement test")
+        val matches = listOf(match(1, "AAA", "BBB", 2, 1))
+        BettingService.placeBet(
+            Bet(matchId = 1, prediction = Prediction.HOME_WIN, predictedHomeScore = 2, predictedAwayScore = 1)
+        )
+
+        assertEquals(3, BettingService.evaluateBonus(matches))
     }
 
     @Test
     fun `evaluateBonus awards 1 point for correct outcome without exact score`() {
-        TODO("implement test")
+        val matches = listOf(match(1, "AAA", "BBB", 2, 1))
+        BettingService.placeBet(
+            Bet(matchId = 1, prediction = Prediction.HOME_WIN, predictedHomeScore = 3, predictedAwayScore = 2)
+        )
+
+        assertEquals(1, BettingService.evaluateBonus(matches))
     }
 
     @Test
     fun `evaluateBonus awards 0 points for a wrong prediction`() {
-        TODO("implement test")
+        val matches = listOf(match(1, "AAA", "BBB", 2, 1))
+        BettingService.placeBet(
+            Bet(matchId = 1, prediction = Prediction.AWAY_WIN, predictedHomeScore = 1, predictedAwayScore = 2)
+        )
+
+        assertEquals(0, BettingService.evaluateBonus(matches))
     }
 
     @Test
     fun `evaluateBonus ignores unplayed matches`() {
-        TODO("implement test")
+        val matches = listOf(match(1, "AAA", "BBB", null, null))
+        BettingService.placeBet(
+            Bet(matchId = 1, prediction = Prediction.HOME_WIN, predictedHomeScore = 2, predictedAwayScore = 1)
+        )
+
+        assertEquals(0, BettingService.evaluateBonus(matches))
     }
 
     // ── removeBet ─────────────────────────────────────────────────────────────

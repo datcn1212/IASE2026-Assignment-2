@@ -80,7 +80,19 @@ object BettingService {
      *   - 0 points if the predicted outcome is wrong or the match has not been played.
      */
     fun evaluateBonus(matches: List<Match>): Int {
-        TODO("Implement bonus point evaluation")
+        val matchById = matches.associateBy { it.matchId }
+        var totalBonus = 0
+        for (bet in bets.values) {
+            val match = matchById[bet.matchId] ?: continue
+            val home = match.homeScore ?: continue
+            val away = match.awayScore ?: continue
+            totalBonus += when {
+                bet.predictedHomeScore == home && bet.predictedAwayScore == away -> 3
+                bet.prediction == Prediction.outcomeOf(home, away) -> 1
+                else -> 0
+            }
+        }
+        return totalBonus
     }
 
     /**
