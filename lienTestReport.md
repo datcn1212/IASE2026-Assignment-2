@@ -72,10 +72,10 @@ fun `load json from network`() {
 
 #### test `standings are stable when multiple teams tie on all criteria()`
 **Reason for error**
-Base on the implementation of `claculate`, the final result is also depends on the `accs` teams IdentityHashMap ' s order.
-In the case that all team has equal score, this influence appeals more strongly.
-The issue is that IdentityHashMap does not guarantee insertion order.
-So even if we insert team `AAA` before team `BBB`, there is still a chance that `BBB` is ordered before `AAA` in this map, hence also in the final result, which causes the test to fail.
+Based on the implementation of `calculate`, the final result also depends on the order of teams in the `accs` `IdentityHashMap`.
+In the case where all teams have equal scores, this effect becomes more apparent.
+The issue is that `IdentityHashMap` does not guarantee insertion order.
+So even if we insert team `AAA` before team `BBB`, there is still a chance that `BBB` will appear before `AAA` in this map and therefore in the final result, which causes the test to fail.
 
 **Fix**
 To fix this issue, we can use a `LinkedHashMap` for `accs`
