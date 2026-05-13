@@ -5,6 +5,7 @@ import org.junit.jupiter.api.assertThrows
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 class BettingServiceTest {
 
@@ -24,28 +25,49 @@ class BettingServiceTest {
     fun resetBets() {
         BettingService.clear()
     }
-//
-//    // ── evaluateBonus ──────────────────────────────────────────────────────────
-//
-//    @Test
-//    fun `evaluateBonus awards 3 points for an exact score prediction`() {
-//        TODO("implement test")
-//    }
-//
-//    @Test
-//    fun `evaluateBonus awards 1 point for correct outcome without exact score`() {
-//        TODO("implement test")
-//    }
-//
-//    @Test
-//    fun `evaluateBonus awards 0 points for a wrong prediction`() {
-//        TODO("implement test")
-//    }
-//
-//    @Test
-//    fun `evaluateBonus ignores unplayed matches`() {
-//        TODO("implement test")
-//    }
+
+    // ── evaluateBonus ──────────────────────────────────────────────────────────
+
+    @Test
+    fun `evaluateBonus awards 3 points for an exact score prediction`() {
+        val matches = listOf(match(1, "AAA", "BBB", 2, 1))
+        BettingService.placeBet(
+            Bet(matchId = 1, prediction = Prediction.HOME_WIN, predictedHomeScore = 2, predictedAwayScore = 1)
+        )
+        BettingService.placeBet(Bet(matchId = 99, prediction = Prediction.HOME_WIN))  // no match in list → skipped
+
+        assertEquals(3, BettingService.evaluateBonus(matches))
+    }
+
+    @Test
+    fun `evaluateBonus awards 1 point for correct outcome without exact score`() {
+        val matches = listOf(match(1, "AAA", "BBB", 2, 1))
+        BettingService.placeBet(
+            Bet(matchId = 1, prediction = Prediction.HOME_WIN, predictedHomeScore = 3, predictedAwayScore = 2)
+        )
+
+        assertEquals(1, BettingService.evaluateBonus(matches))
+    }
+
+    @Test
+    fun `evaluateBonus awards 0 points for a wrong prediction`() {
+        val matches = listOf(match(1, "AAA", "BBB", 2, 1))
+        BettingService.placeBet(
+            Bet(matchId = 1, prediction = Prediction.AWAY_WIN, predictedHomeScore = 1, predictedAwayScore = 2)
+        )
+
+        assertEquals(0, BettingService.evaluateBonus(matches))
+    }
+
+    @Test
+    fun `evaluateBonus ignores unplayed matches`() {
+        val matches = listOf(match(1, "AAA", "BBB", null, null))
+        BettingService.placeBet(
+            Bet(matchId = 1, prediction = Prediction.HOME_WIN, predictedHomeScore = 2, predictedAwayScore = 1)
+        )
+
+        assertEquals(0, BettingService.evaluateBonus(matches))
+    }
 
     // ── removeBet ─────────────────────────────────────────────────────────────
 

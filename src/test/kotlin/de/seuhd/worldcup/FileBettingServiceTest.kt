@@ -2,6 +2,7 @@ package de.seuhd.worldcup
 
 import java.io.File
 import kotlin.io.path.createTempFile
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import org.junit.jupiter.api.MethodOrderer
@@ -13,12 +14,9 @@ import kotlin.test.BeforeTest
 class FileBettingServiceTest {
 
     @BeforeTest
-    fun init() {
-        if (SHARED_BET_FILE.exists()) {
-            SHARED_BET_FILE.writeText("")
-        }
+    fun resetSharedFile() {
+        SHARED_BET_FILE.delete()
     }
-
 
     @Test
     fun `test file betting with threads`() {
