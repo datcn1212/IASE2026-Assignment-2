@@ -99,7 +99,8 @@ object BettingService {
      * Remove the bet for [matchId]. Does nothing if no bet exists for that match.
      */
     fun removeBet(matchId: Int) {
-        TODO("Implement removing a single bet by matchId")
+        bets.remove(matchId)
+        cachedResult = null
     }
 
     /**
@@ -107,7 +108,9 @@ object BettingService {
      * exists; throws [IllegalArgumentException] if no bet is found for that match.
      */
     fun changeBet(bet: Bet) {
-        TODO("Implement changing an existing bet")
+        require(bets.containsKey(bet.matchId)) { "No bet exists for matchId ${bet.matchId}" }
+        bets[bet.matchId] = bet
+        cachedResult = null
     }
 
     /** Drop all stored bets. */

@@ -3,6 +3,7 @@ package de.seuhd.worldcup
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 class BettingServiceTest {
 
@@ -31,6 +32,7 @@ class BettingServiceTest {
         BettingService.placeBet(
             Bet(matchId = 1, prediction = Prediction.HOME_WIN, predictedHomeScore = 2, predictedAwayScore = 1)
         )
+        BettingService.placeBet(Bet(matchId = 99, prediction = Prediction.HOME_WIN))  // no match in list → skipped
 
         assertEquals(3, BettingService.evaluateBonus(matches))
     }
@@ -69,23 +71,33 @@ class BettingServiceTest {
 
     @Test
     fun `removeBet removes an existing bet so it no longer affects evaluation`() {
-        TODO("implement test")
+        val matches = listOf(match(1, "AAA", "BBB", 2, 1))
+        BettingService.placeBet(Bet(matchId = 1, prediction = Prediction.HOME_WIN))
+        BettingService.removeBet(1)
+
+        assertEquals(0, BettingService.evaluate(matches).evaluated)
     }
 
     @Test
     fun `removeBet does nothing when no bet exists for that matchId`() {
-        TODO("implement test")
+        BettingService.removeBet(99)  // no bet placed — must not throw
     }
 
     // ── changeBet ─────────────────────────────────────────────────────────────
 
     @Test
     fun `changeBet updates the prediction for an existing bet`() {
-        TODO("implement test")
+        val matches = listOf(match(1, "AAA", "BBB", 2, 1))
+        BettingService.placeBet(Bet(matchId = 1, prediction = Prediction.AWAY_WIN))
+        BettingService.changeBet(Bet(matchId = 1, prediction = Prediction.HOME_WIN))
+
+        assertEquals(1, BettingService.evaluate(matches).correct)
     }
 
     @Test
     fun `changeBet throws when no bet exists for that matchId`() {
-        TODO("implement test")
+        assertFailsWith<IllegalArgumentException> {
+            BettingService.changeBet(Bet(matchId = 99, prediction = Prediction.HOME_WIN))
+        }
     }
 }
